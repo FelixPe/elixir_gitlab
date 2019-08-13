@@ -5,7 +5,7 @@ defmodule ElixirGitlab.Mixfile do
     [
       app:     :elixir_gitlab,
       version: "0.0.1",
-      elixir:  "~> 1.2",
+      elixir:  "~> 1.9",
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps
@@ -24,10 +24,10 @@ defmodule ElixirGitlab.Mixfile do
 
   defp deps do
     [
-      {:poison,    "~> 2.0.0"},
-      {:httpoison, "~> 0.8.0"},
+      {:poison,    "~> 4.0.1"},
+      {:httpoison, "~> 1.5.1"},
 
-      {:bypass,   "~> 0.1", only: :test},
+      {:bypass,   "~> 1.0.0", only: :test},
     ]
   end
 end

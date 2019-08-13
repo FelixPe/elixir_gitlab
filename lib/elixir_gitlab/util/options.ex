@@ -2,7 +2,7 @@ defmodule ElixirGitlab.Util.Options do
 
   alias ElixirGitlab.API
 
-  @doc """
+  @moduledoc """
   Make sure a given set of options has all the required keys,
   and that any remaining keys are listed in the set of
   optional entries. Return `{:ok, given}` on success, and
@@ -12,7 +12,7 @@ defmodule ElixirGitlab.Util.Options do
   ========
 
         iex> import ElixirGitlab.Util.Options
-        nil
+        ElixirGitlab.Util.Options
         iex> spec = %{ required: MapSet.new([:name, :email]), optional: MapSet.new([:age, :height]) }
         iex> opts([name: "dave", email: "dave@", height: "yes"], spec)
         { :ok, [name: "dave", email: "dave@", height: "yes"]}
@@ -32,7 +32,7 @@ defmodule ElixirGitlab.Util.Options do
     with { :ok, full_options } <- opts(options, option_spec),
     do:  apply(API, method, [path, full_options])
   end
-  
+
   defp opts_required(given, %{ required: required }) do
     if MapSet.subset?(required, given) do
       :ok
