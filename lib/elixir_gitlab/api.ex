@@ -9,7 +9,10 @@ defmodule ElixirGitlab.API do
   # private_token: Application.get_env(:elixir_gitlab, :private_token)
   
   defp gitlab_config do
-    Application.fetch_env!(:elixir_gitlab)
+    %{
+      url_prefix: Application.fetch_env!(:elixir_gitlab, :url_prefix),
+      private_token: Application.fetch_env!(:elixir_gitlab, :private_token)
+    }
   end
 
   #######
