@@ -14,7 +14,7 @@ defmodule ElixirGitlab.Mixfile do
 
   def application do
     [
-      applications: [
+      extra_applications: [
         :logger,
         :httpoison,
       ],

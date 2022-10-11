@@ -22,14 +22,14 @@ defmodule ElixirGitlab.Util.Options do
         { :error, "Unknown option(s): [:likes]" }
   """
   def opts(given, spec) when is_list(given) do
-    with keys = given |> Dict.keys |> MapSet.new,
+    with keys <- given |> Dict.keys |> MapSet.new,
          :ok <- opts_required(keys, spec),
          :ok <- opts_optional(keys, spec),
-    do: { :ok, given }
+    do: {:ok, given }
   end
 
   def call_with_options(method, path, options, option_spec) do
-    with { :ok, full_options } <- opts(options, option_spec),
+    with {:ok, full_options } <- opts(options, option_spec),
     do:  apply(API, method, [path, full_options])
   end
 
@@ -37,7 +37,7 @@ defmodule ElixirGitlab.Util.Options do
     if MapSet.subset?(required, given) do
       :ok
     else
-      { :error, "Required: #{members(required)} but given #{members(given)}" }
+      {:error, "Required: #{members(required)} but given #{members(given)}" }
     end
   end
 
@@ -46,20 +46,20 @@ defmodule ElixirGitlab.Util.Options do
   end
 
   defp opts_optional(given, spec) do
-    with remaining = given
+    with remaining <- given
                      |> MapSet.difference(maybe_missing(spec, :required))
                      |> MapSet.difference(maybe_missing(spec, :optional)) do
-      if Set.size(remaining) == 0 do
+      if MapSet.size(remaining) == 0 do
         :ok
       else
-        { :error, "Unknown option(s): #{members(remaining)}" }
+        {:error, "Unknown option(s): #{members(remaining)}" }
       end
     end
   end
 
   defp members(set) do
     set
-    |> Set.to_list
+    |> MapSet.to_list
     |> inspect
   end
 

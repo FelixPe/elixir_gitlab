@@ -5,7 +5,10 @@ defmodule ElixirGitlab do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(ElixirGitlab.API, []),
+      %{
+        id: ElixirGitlab.API,
+        start: {ElixirGitlab.API, :start_link, []}
+      }
     ]
 
     opts = [strategy: :one_for_one, name: ElixirGitlab.Supervisor]

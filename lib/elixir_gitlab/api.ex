@@ -43,6 +43,10 @@ defmodule ElixirGitlab.API do
   # Implementation #
   ##################
 
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
   def handle_call({:get, endpoint, options}, _from,  env) do
     call_server(endpoint, options, env, &HTTPoison.get/1)
   end
