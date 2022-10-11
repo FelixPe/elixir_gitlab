@@ -22,7 +22,7 @@ defmodule ElixirGitlab.Util.Options do
         { :error, "Unknown option(s): [:likes]" }
   """
   def opts(given, spec) when is_list(given) do
-    with keys <- given |> Dict.keys |> MapSet.new,
+    with keys <- given |> Keyword.keys |> MapSet.new,
          :ok <- opts_required(keys, spec),
          :ok <- opts_optional(keys, spec),
     do: {:ok, given }
