@@ -8,7 +8,7 @@ defmodule ElixirGitlab.Mixfile do
       elixir:  "~> 1.9",
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
-      deps: deps
+      deps: deps()
     ]
   end
 
@@ -24,10 +24,10 @@ defmodule ElixirGitlab.Mixfile do
 
   defp deps do
     [
-      {:poison,    "~> 4.0.1"},
-      {:httpoison, "~> 1.5.1"},
+      {:poison,    "~> 5.0.0"},
+      {:httpoison, "~> 1.8.2"},
 
-      {:bypass,   "~> 1.0.0", only: :test},
+      {:bypass,   "~> 2.1.0", only: :test},
     ]
   end
 end

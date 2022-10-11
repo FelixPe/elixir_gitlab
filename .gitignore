@@ -4,3 +4,5 @@
 erl_crash.dump
 *.ez
 config/private.exs
+config/dev.exs
+config/test.exs
