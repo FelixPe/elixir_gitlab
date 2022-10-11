@@ -5,17 +5,19 @@ defmodule ElixirGitlab.API do
 
   @name __MODULE__
 
-  @default_environment %{
-    url_prefix:    Application.get_env(:elixir_gitlab, :url_prefix),
-    private_token: Application.get_env(:elixir_gitlab, :private_token)
-  }
+  # url_prefix:    Application.get_env(:elixir_gitlab, :url_prefix),
+  # private_token: Application.get_env(:elixir_gitlab, :private_token)
+  
+  defp gitlab_config do
+    Application.fetch_env!(:elixir_gitlab)
+  end
 
   #######
   # API #
   #######
 
   def start_link() do
-    GenServer.start_link(@name, @default_environment, name: @name)
+    GenServer.start_link(@name, gitlab_config(), name: @name)
   end
 
   def get(endpoint, options \\ []) do
@@ -65,7 +67,7 @@ defmodule ElixirGitlab.API do
 
   # Only for testing
   def handle_cast({:set_url_prefix, prefix}, env) do
-    { :noreply, Map.put(env, :url_prefix, prefix) }
+    {:noreply, Map.put(env, :url_prefix, prefix)}
   end
 
   ###########
@@ -73,16 +75,16 @@ defmodule ElixirGitlab.API do
   ###########
 
   def call_server(endpoint, options, env, http_fn) do
-    with response = endpoint
+    with response <- endpoint
                     |> to_url(options, env)
                     |> IO.inspect
                     |> http_fn.()
                     |> decode_response,
-    do: { :reply, response, env }
+    do: {:reply, response, env}
   end
 
   def to_url(endpoint, options, %{ url_prefix: prefix, private_token: token }) do
-    with full_opts = [ {:private_token, token} | options ],
+    with full_opts <- [ {:private_token, token} | options ],
     do:  "#{prefix}/#{endpoint}?#{encode_options(full_opts)}"
   end
 
@@ -99,11 +101,11 @@ defmodule ElixirGitlab.API do
   def decode_response({:ok, %{status_code: status, body: message}}) do
     cond do
       200 <= status and status < 300 ->
-        { :ok, Poison.decode!(message, keys: :atoms) }
+        {:ok, Poison.decode!(message, keys: :atoms)}
       400 <= status and status < 500 ->
-        { :error, { status, message } }
+        {:error, { status, message }}
       500 <= status and status < 600 ->
-        { :server_error, message }
+        {:server_error, message}
     end
   end
   
